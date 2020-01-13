@@ -1,4 +1,7 @@
 $(document).ready(function() {
+
+    var templateToDo = $('#todo-template').html();
+    var templateFunction = Handlebars.compile(templateToDo);
     stampaList();
 
     $('button').click(function() {
@@ -6,8 +9,8 @@ $(document).ready(function() {
         aggiuntaList(nuovoTodo);
     });
 
-    function aggiuntaList() {
-        $('ul').empty()
+    function aggiuntaList(text) {
+        $('#list').empty();
         $.ajax({
             'url': 'http://157.230.17.132:3011/todos',
             'method': 'POST',
@@ -25,10 +28,16 @@ $(document).ready(function() {
             'url': 'http://157.230.17.132:3011/todos',
             'method': 'GET',
             'success': function(data) {
-                var todos = data
-                for (var i = 0; i < todos.length; i++) {
-                    var todoText = todos[i].text;
-                    $('ul').append('<li>' + todoText + '</li>');
+                var toDos = data
+                for (var i = 0; i < toDos.length; i++) {
+                    var toDoText = toDos[i].text;
+                    var toDoId = toDos[i].id;
+                    var elements = {
+                        'id': toDoId,
+                        'text': toDoText
+                    };
+                    var html = templateFunction(elements);
+                    $('#list').append(html);
                 };
             },
             'error': function(data) {
