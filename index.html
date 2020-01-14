@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://momentjs.com/downloads/moment.js" charset="utf-8"></script>
         <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
         <script src="main.js" charset="utf-8"></script>
         <link rel="stylesheet" href="style.css">
@@ -14,18 +15,29 @@
     <body>
         <header>
             <h1>To do list.</h1>
+            <span id="time"></span>
         </header>
         <main>
             <div class="container">
                 <div id="list"></div>
-                <input type="text" value="" placeholder="Add a task...">
+                <input id="add" type="text" value="" placeholder="Add a task...">
                 <button type="button" name="button">Add</button>
             </div>
         </main>
+        <footer>
+            <small>Powered by Salvatore Lo Monaco.</small>
+        </footer>
         <script id="todo-template" type="text/x-handlebars-template">
-            <div data-id={{ id }}>
-                <span>{{ text }}</span>
-                <i class="far fa-trash-alt delete"></i>
+            <div class="todo-container" data-id="{{ id }}">
+                <span class="todo-text">
+                    <input type="checkbox" class="checkbox">{{ text }}
+                </span>
+                <input class="edit-input" type="text" value="">
+                <div class="icons">
+                    <i class="far fa-save save"></i>
+                    <i class="fas fa-edit edit"></i>
+                    <i class="far fa-trash-alt delete"></i>
+                </div>
             </div>
         </script>
     </body>

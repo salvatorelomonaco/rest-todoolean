@@ -5,18 +5,23 @@ body {
 }
 
 header {
-    padding: 20px 0;
+    padding: 30px 0 40px 0;
     text-align: center;
     text-transform: uppercase;
 }
 
 h1 {
-    font-size: 40px;
+    font-size: 50px;
+    margin-bottom: 10px
+}
+
+#time {
+    color:
 }
 
 main {
     width: 100%;
-    font-size: 20px;
+    font-size: 22px;
 }
 
 .container {
@@ -26,7 +31,7 @@ main {
     flex-direction: column;
 }
 
-#list div {
+#list div.todo-container {
     width: 100%;
     border-bottom: 1px solid #343a40;
     padding: 15px 10px;
@@ -35,21 +40,59 @@ main {
     text-transform: capitalize;
 }
 
-#list div span {
+#list div.todo-container span {
     cursor: default;
+}
+
+#list div.todo-container span.done {
+    text-decoration: line-through red;
+}
+
+.checkbox {
+    margin-right: 10px;
 }
 
 #list div i {
     visibility: hidden;
     cursor: pointer;
+    margin-right: 10px;
 }
 
-#list div:hover, #list div:hover i {
+.edit {
+    transition: color 0.2s;
+}
+
+.edit:hover {
+    color: rgb(255,255,0, 0.8)
+}
+
+.save {
+    display: none;
+    transition: color 0.2s;
+}
+
+.save:hover {
+    color: rgba(50,205,50,0.8);
+}
+
+.save.active {
+    display: inline-block;
+}
+
+.delete {
+    transition: color 0.2s;
+}
+
+.delete:hover{
+    color: rgba(255, 0, 0, 0.8);
+}
+
+#list div.todo-container:hover, #list div.todo-container:hover i {
     background-color: #343a40;
     visibility: visible;
 }
 
-input {
+#add {
     margin-top: 25px;
     background-color: #343a40;
     border: 1px solid #31353c;
@@ -59,7 +102,17 @@ input {
     padding-left: 10px;
 }
 
-button{
+.edit-input {
+    background-color: #e1eaf2;
+    color: #343a40;
+    border: 0;
+    border-radius: 3px;
+    height: 30px;
+    padding-left: 10px;
+    width: 40%;
+}
+
+button {
     color: #343a40;
     align-self: center;
     border: 0;
@@ -68,4 +121,34 @@ button{
     border-radius: 3px;
     padding: 10px 30px;
     margin-top: 10px;
+    font-size: 17px;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: rgb(127,255,0,0.3);
+}
+
+.edit-input {
+    display: none;
+}
+
+.edit-input.active {
+    display: inline-block;
+}
+
+.todo-text {
+    display: inline-block;
+}
+
+.todo-text.hidden {
+    display: none;
+}
+
+footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100px;
 }

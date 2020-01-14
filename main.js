@@ -2,81 +2,146 @@ $(document).ready(function() {
 
     var templateToDo = $('#todo-template').html();
     var templateFunction = Handlebars.compile(templateToDo);
-    stampaList();
+
+    window.setInterval(timeLive, 100);
+
+
+    stampaToDo();
 
     $('button').click(function() {
-        var nuovoTodo = $('input').val();
-        if (nuovoTodo.length > 0) {
-            aggiuntaList(nuovoTodo);
-            nuovoTodo = $('input').val('');
+        var textCurrent = $('#add').val().trim();
+        if (textCurrent.length > 0) {
+            aggiuntaList(textCurrent);
+            $('#add').val('');
         } else {
-            alert('Insert a valid task.')
+            alert('Inserisci un testo valido')
         }
-    });
+    })
 
-    $('input').keypress(function(event) {
+    $('#add').keypress(function(event) {
         if (event.which == 13) {
-            var nuovoTodo = $('input').val().trim();
-            if (nuovoTodo.length > 0) {
-                 $('input').val('');
-                aggiuntaList(nuovoTodo);
+            var textCurrent = $('#add').val().trim();
+            if (textCurrent.length > 0) {
+                $('input').val('');
+                aggiuntaList(textCurrent);
             } else {
                 alert('Insert a valid task.')
             }
         }
     });
 
-    $('#list').on('click', '.delete', function(){
-        var idToDoCurrent = $(this).parent().attr('data-id');
+    $('#list').on('click', '.delete', function() {
+        var idToDoCurrent = $(this).closest('.todo-container').attr('data-id');
+        cancellaToDo(idToDoCurrent);
+    })
+
+    $('#list').on('click', '.edit', function() {
+        $('.edit').parent().prev().removeClass('active');
+        $('.edit').parent().siblings('.todo-text').removeClass('hidden');
+        $('.edit').siblings('.save').removeClass('active');
+        $('.edit').show();
+        $(this).parent().prev().addClass('active');
+        $(this).parent().siblings('.todo-text').addClass('hidden');
+        $(this).siblings('.save').addClass('active');
+        $(this).hide();
+    })
+
+    $('#list').on('click', '.save', function() {
+        var idToDoCurrent = $(this).closest('.todo-container').attr('data-id');
+        var textCurrent = $(this).parent().prev().val().trim();
+        if (textCurrent.length > 0) {
+            modificaToDo(idToDoCurrent, textCurrent);
+        } else {
+            alert('Insert a valid task.');
+        }
+    })
+
+    $('#list').on('keypress', '.edit-input', function(event) {
+        if (event.which == 13) {
+            var idToDoCurrent = $(this).parent().attr('data-id');
+            var textCurrent = $(this).val().trim();
+            if (textCurrent.length > 0) {
+                modificaToDo(idToDoCurrent, textCurrent);
+            } else {
+                alert('Insert a valid task.');
+            }
+        }
+    });
+
+    function modificaToDo(id, text) {
         $.ajax({
-            'url': 'http://157.230.17.132:3011/todos/' + idToDoCurrent,
+            'url': 'http://157.230.17.132:3011/todos/' + id,
+            'method': 'PUT',
+            'data': {
+                'text': text
+            },
+            'success': function(data) {
+                stampaToDo();
+            },
+            'error': function() {
+                alert('error')
+            }
+        })
+    }
+
+    function cancellaToDo(id) {
+        $.ajax({
+            'url': 'http://157.230.17.132:3011/todos/' + id,
             'method': 'DELETE',
             'success': function(data) {
-                stampaList();
+                stampaToDo();
             },
-            'error': function(data) {
-                alert('Error');
+            'error': function() {
+                alert('error')
             }
-        });
-    });
+        })
+    }
 
     function aggiuntaList(text) {
         $.ajax({
-            'url': 'http://157.230.17.132:3011/todos',
+            'url': 'http://157.230.17.132:3011/todos/',
             'method': 'POST',
             'data': {
                 'text': text
             },
             'success': function(data) {
-                stampaList();
+                stampaToDo();
             },
-            'error': function(data) {
-                alert('Error');
+            'error': function() {
+                alert('error')
             }
-        });
-    };
+        })
+    }
 
-    function stampaList() {
+    function stampaToDo() {
         $.ajax({
             'url': 'http://157.230.17.132:3011/todos/',
             'method': 'GET',
             'success': function(data) {
                 $('#list').empty();
-                var toDos = data
-                for (var i = 0; i < toDos.length; i++) {
-                    var toDoText = toDos[i].text;
-                    var toDoId = toDos[i].id;
+                for (var i = 0; i < data.length; i++) {
+                    var text = data[i].text;
+                    var id = data[i].id;
                     var elements = {
-                        'id': toDoId,
-                        'text': toDoText
+                        'id': id,
+                        'text': text
                     };
                     var html = templateFunction(elements);
                     $('#list').append(html);
-                };
+                }
             },
-            'error': function(data) {
-                alert('Error');
+            'error': function() {
+                alert('error')
             }
-        });
-    };
+        })
+    }
+    
+    function timeLive() {
+        var time = moment().format('MMMM Do YYYY, h:mm a');
+        document.getElementById('time').innerHTML = time;
+    }
 });
+
+$(document).on('click', '.checkbox', function(){
+    $(this).parent().toggleClass('done');
+})
