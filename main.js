@@ -70,7 +70,7 @@ $(document).ready(function() {
 
     function modificaToDo(id, text) {
         $.ajax({
-            'url': 'http://157.230.17.132:3011/todos/' + id,
+            'url': 'https://157.230.17.132:3011/todos/' + id,
             'method': 'PUT',
             'data': {
                 'text': text
@@ -86,7 +86,7 @@ $(document).ready(function() {
 
     function cancellaToDo(id) {
         $.ajax({
-            'url': 'http://157.230.17.132:3011/todos/' + id,
+            'url': 'https://157.230.17.132:3011/todos/' + id,
             'method': 'DELETE',
             'success': function(data) {
                 stampaToDo();
@@ -99,7 +99,7 @@ $(document).ready(function() {
 
     function aggiuntaList(text) {
         $.ajax({
-            'url': 'http://157.230.17.132:3011/todos/',
+            'url': 'https://157.230.17.132:3011/todos/',
             'method': 'POST',
             'data': {
                 'text': text
@@ -115,7 +115,7 @@ $(document).ready(function() {
 
     function stampaToDo() {
         $.ajax({
-            'url': 'http://157.230.17.132:3011/todos/',
+            'url': 'https://157.230.17.132:3011/todos/',
             'method': 'GET',
             'success': function(data) {
                 $('#list').empty();
